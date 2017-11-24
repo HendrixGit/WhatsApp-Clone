@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
-        android:id="@+id/editText5"
+        android:id="@+id/edit_cod_validacao"
         android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="34dp"
@@ -56,11 +56,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/botaoValidar"
-        android:id="@+id/button2"
+        android:id="@+id/button_validar"
         android:layout_marginTop="34dp"
         android:textColor="@color/textColorPrimary"
         android:background="@color/colorPrimaryDark"
-        android:layout_below="@+id/editText5"
+        android:layout_below="@+id/edit_cod_validacao"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
