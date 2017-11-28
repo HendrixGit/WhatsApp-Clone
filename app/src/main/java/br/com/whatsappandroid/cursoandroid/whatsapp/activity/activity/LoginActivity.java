@@ -47,12 +47,19 @@ public class LoginActivity extends AppCompatActivity {
                 String telefoneCompleto = codPais.getText().toString() + codArea.getText().toString() + telefone.getText().toString();
                 String telefoneSemFormatacao = telefoneCompleto.replace("+", "");
                 telefoneSemFormatacao = telefoneCompleto.replace("-", "");
-                //Gerar Token no servidor por questao de segurança
-                Random randomico = new Random();//gerar toque de 4 digitos
-                int numeroRandomico = randomico.nextInt(9999 - 1000) + 1000;//garante que sera gerado um numero aleatorio de 4 digitos
-                String token = String.valueOf(numeroRandomico);
-                Log.i("token",token.toString());
+
+                generateToken(telefoneSemFormatacao);
+
+
             }
         });
+    }
+
+    private static String generateToken(String telefone) {
+        //Gerar Token no servidor por questao de segurança
+        Random randomico = new Random();//gerar toque de 4 digitos
+        int numeroRandomico = randomico.nextInt(9999 - 1000) + 1000;//garante que sera gerado um numero aleatorio de 4 digitos
+        String token = String.valueOf(numeroRandomico);
+        return token;
     }
 }
