@@ -2,6 +2,7 @@ package whatsapp.cursoandroid.com.whatsapp.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -10,7 +11,6 @@ import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.Random;
-import java.util.StringTokenizer;
 
 import whatsapp.cursoandroid.com.whatsapp.helper.Preferencias;
 import whatsapp.cursoandroid.com.whatsapp.helper.Util;
@@ -24,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText codPais;
     private EditText codArea;
     private Button   botaoCadastrar;
+    public  String   mensagemEnvio = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,15 +53,26 @@ public class LoginActivity extends AppCompatActivity {
 
                 Preferencias preferencias = new Preferencias(LoginActivity.this);
 
-                if (!(nome.getText().toString().equals(""))) {
-                    preferencias.salvarUsuarioPreferencias(nomeUsuario, telefoneSemFormatacao, generateToken());
+                if ((!nome.getText().toString().equals("")) && (!telefone.getText().toString().equals(""))
+                   && (!codArea.getText().toString().equals("")) && (!codPais.getText().toString().equals("")) ) {
+                    mensagemEnvio = generateToken();
+                    preferencias.salvarUsuarioPreferencias(nomeUsuario, telefoneSemFormatacao, mensagemEnvio);
+
+                    //Envio de sms(+5517991515141)
+                    telefoneSemFormatacao = "5554";//teste no emulador
+                    if (enviaSMS("+" + telefoneSemFormatacao,mensagemEnvio) == true){
+                        Toast.makeText(getApplicationContext(),"SMS Enviado com sucesso",Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(),"Falha no envio do SMS ",Toast.LENGTH_SHORT).show();
+                    }
+                    HashMap<String, String> usuario = preferencias.getDadosusuario();
+                    Log.i("Nome", "Nome: " + usuario.get("nome") + " TELEFONE: " +  usuario.get("telefone") + " Token: " + usuario.get("token"));
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"Favor Preencha os dados",Toast.LENGTH_SHORT).show();
                 }
 
-                HashMap<String, String> usuario = preferencias.getDadosusuario();
-                Log.i("Nome", "Nome: " + usuario.get("nome") + " TELEFONE: " +  usuario.get("telefone") + " Token: " + usuario.get("token"));
             }
         });
     }
@@ -71,5 +83,16 @@ public class LoginActivity extends AppCompatActivity {
         int numeroRandomico = randomico.nextInt(9999 - 1000) + 1000;//garante que sera gerado um numero aleatorio de 4 digitos
         String token = String.valueOf(numeroRandomico);
         return token;
+    }
+    private boolean enviaSMS(String telefone, String mensagem){
+        try {
+            SmsManager smsManager = SmsManager.getDefault();//classe para o envio de SMS
+            smsManager.sendTextMessage(telefone, null, mensagem, null, null);
+            return true;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 }
