@@ -1,20 +1,16 @@
-package br.com.whatsappandroid.cursoandroid.whatsapp.activity.activity;
+package whatsapp.cursoandroid.com.whatsapp.activity;
 
-import android.support.annotation.StringDef;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.menu.ActionMenuItemView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.github.rtoshiro.util.format.SimpleMaskFormatter;
-import com.github.rtoshiro.util.format.text.MaskTextWatcher;
-
 import java.util.Random;
 
-import br.com.whatsappandroid.cursoandroid.whatsapp.R;
+import whatsapp.cursoandroid.com.whatsapp.helper.Util;
+import whatsapp.cursoandroid.whatsappandroid.cursoandroid.whatsapp.R;
+
 
 public class LoginActivity extends AppCompatActivity {
 

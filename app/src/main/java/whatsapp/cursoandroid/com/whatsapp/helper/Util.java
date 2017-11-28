@@ -1,4 +1,4 @@
-package br.com.whatsappandroid.cursoandroid.whatsapp.activity.activity;
+package whatsapp.cursoandroid.com.whatsapp.helper;
 
 import android.widget.TextView;
 

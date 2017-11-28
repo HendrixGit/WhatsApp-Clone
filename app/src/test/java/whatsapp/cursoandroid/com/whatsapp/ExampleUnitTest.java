@@ -1,4 +1,4 @@
-package br.com.whatsappandroid.cursoandroid.whatsapp;
+package whatsapp.cursoandroid.com.whatsapp;
 
 import org.junit.Test;
 

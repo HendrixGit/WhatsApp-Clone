@@ -1,9 +1,9 @@
-package br.com.whatsappandroid.cursoandroid.whatsapp.activity.activity;
+package whatsapp.cursoandroid.com.whatsapp.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import br.com.whatsappandroid.cursoandroid.whatsapp.R;
+import whatsapp.cursoandroid.whatsappandroid.cursoandroid.whatsapp.R;
 
 public class ValidadorActivity extends AppCompatActivity {
 
