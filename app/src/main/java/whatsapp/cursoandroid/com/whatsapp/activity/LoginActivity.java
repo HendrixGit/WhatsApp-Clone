@@ -1,8 +1,6 @@
 package whatsapp.cursoandroid.com.whatsapp.activity;
 
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
@@ -32,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     private String[]  permissoesNecessarias = new String[]{
             android.Manifest.permission.SEND_SMS
     };
+    private Util util;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         botaoCadastrar = (Button) findViewById(R.id.button_Cadastrar);
 
 
-        Util util = new Util();
+        util = new Util();
         codPais.addTextChangedListener(util.GenerateMask("+NN",codPais));
         codArea.addTextChangedListener(util.GenerateMask("NN",codArea));
         telefone.addTextChangedListener(util.GenerateMask("NNNNN-NNNN",telefone));
@@ -109,22 +108,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissoes, grantResults);
         for(int resultado : grantResults){
             if(resultado == PackageManager.PERMISSION_DENIED){
-                alertaValidacaoPermissao();
+                util.alertaValidacaoPermissao(this, "Permissões Negadas", "Para utilizar o app é preciso aceitar as permissões");
             }
         }
-    }
-    private void alertaValidacaoPermissao(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Permissões Negagas: ");
-        builder.setMessage("Para utilizar o app é preciso aceitar as permissões");
-        builder.setPositiveButton("CONFIRMA", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 }
