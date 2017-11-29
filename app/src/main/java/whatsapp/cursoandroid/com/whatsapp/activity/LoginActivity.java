@@ -1,5 +1,8 @@
 package whatsapp.cursoandroid.com.whatsapp.activity;
 
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
@@ -15,7 +18,6 @@ import java.util.Random;
 import whatsapp.cursoandroid.com.whatsapp.helper.Permissao;
 import whatsapp.cursoandroid.com.whatsapp.helper.Preferencias;
 import whatsapp.cursoandroid.com.whatsapp.helper.Util;
-import whatsapp.cursoandroid.whatsappandroid.cursoandroid.whatsapp.Manifest;
 import whatsapp.cursoandroid.whatsappandroid.cursoandroid.whatsapp.R;
 
 
@@ -36,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Permissao.validaPermissoes(1, this,permissoesNecessarias);
+        Permissao.validaPermissoes(1, this, permissoesNecessarias);
 
         nome     = (EditText) findViewById(R.id.edit_nome);
         telefone = (EditText) findViewById(R.id.edit_telefone);
@@ -102,5 +104,27 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
             return false;
         }
+    }
+    public void onRequestPermissionsResult(int requestCode, String[] permissoes, int[] grantResults){//verificar se as opcoes foi negada
+        super.onRequestPermissionsResult(requestCode, permissoes, grantResults);
+        for(int resultado : grantResults){
+            if(resultado == PackageManager.PERMISSION_DENIED){
+                alertaValidacaoPermissao();
+            }
+        }
+    }
+    private void alertaValidacaoPermissao(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Permissões Negagas: ");
+        builder.setMessage("Para utilizar o app é preciso aceitar as permissões");
+        builder.setPositiveButton("CONFIRMA", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

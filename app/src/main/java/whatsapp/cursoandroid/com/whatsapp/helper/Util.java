@@ -4,6 +4,7 @@ import android.widget.TextView;
 
 import com.github.rtoshiro.util.format.SimpleMaskFormatter;
 import com.github.rtoshiro.util.format.text.MaskTextWatcher;
+import android.support.v7.app.AppCompatActivity;
 
 public class Util {
 
@@ -12,4 +13,5 @@ public class Util {
         MaskTextWatcher maskWatcher = new MaskTextWatcher(component,simpleMask);
         return maskWatcher;
     }
+
 }
