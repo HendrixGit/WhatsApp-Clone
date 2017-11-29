@@ -50,7 +50,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="34dp"
         android:textColor="@color/textColorPrimary"
-        android:hint="Digite o Código" />
+        android:hint="Digite o Código"
+        android:textAlignment="center" />
 
     <Button
         android:layout_width="match_parent"

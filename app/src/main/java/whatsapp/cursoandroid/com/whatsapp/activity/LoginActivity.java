@@ -1,5 +1,6 @@
 package whatsapp.cursoandroid.com.whatsapp.activity;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -71,6 +72,9 @@ public class LoginActivity extends AppCompatActivity {
                     telefoneSemFormatacao = "5554";//teste no emulador
                     if (enviaSMS("+" + telefoneSemFormatacao,mensagemEnvio) == true){
                         Toast.makeText(getApplicationContext(),"SMS Enviado com sucesso",Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(LoginActivity.this,ValidadorActivity.class);
+                        startActivity(intent);
+                        finish();//destroy o LoginActivity
                     }
                     else{
                         Toast.makeText(getApplicationContext(),"Falha no envio do SMS ",Toast.LENGTH_SHORT).show();
