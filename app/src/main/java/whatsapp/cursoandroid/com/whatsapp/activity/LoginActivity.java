@@ -12,8 +12,10 @@ import android.widget.Toast;
 import java.util.HashMap;
 import java.util.Random;
 
+import whatsapp.cursoandroid.com.whatsapp.helper.Permissao;
 import whatsapp.cursoandroid.com.whatsapp.helper.Preferencias;
 import whatsapp.cursoandroid.com.whatsapp.helper.Util;
+import whatsapp.cursoandroid.whatsappandroid.cursoandroid.whatsapp.Manifest;
 import whatsapp.cursoandroid.whatsappandroid.cursoandroid.whatsapp.R;
 
 
@@ -24,12 +26,17 @@ public class LoginActivity extends AppCompatActivity {
     private EditText codPais;
     private EditText codArea;
     private Button   botaoCadastrar;
-    public  String   mensagemEnvio = "";
+    private  String   mensagemEnvio = "";
+    private String[]  permissoesNecessarias = new String[]{
+            android.Manifest.permission.SEND_SMS
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        Permissao.validaPermissoes(1, this,permissoesNecessarias);
 
         nome     = (EditText) findViewById(R.id.edit_nome);
         telefone = (EditText) findViewById(R.id.edit_telefone);
@@ -55,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 if ((!nome.getText().toString().equals("")) && (!telefone.getText().toString().equals(""))
                    && (!codArea.getText().toString().equals("")) && (!codPais.getText().toString().equals("")) ) {
+
                     mensagemEnvio = generateToken();
                     preferencias.salvarUsuarioPreferencias(nomeUsuario, telefoneSemFormatacao, mensagemEnvio);
 
