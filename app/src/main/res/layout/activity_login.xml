@@ -8,7 +8,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="whatsapp.cursoandroid.whatsappandroid.cursoandroid.whatsapp.activity.activity.LoginActivity"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorPrimary"
+    android:gravity="center_vertical|center_horizontal">
 
     <ImageView
         android:layout_width="@dimen/larguraLogo"
@@ -19,62 +20,50 @@
         android:background="@drawable/logo" />
 
     <EditText
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_nome"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/edit_Login_email"
+        android:layout_marginTop="31dp"
         android:layout_below="@+id/imageView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="Digite o Seu Nome"
-        android:textColor="@color/textColorPrimary" />
-
-    <EditText
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/edit_cod_pais"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="+55"
-        android:textColor="@color/textColorPrimary" />
-
-    <EditText
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/edit_cod_area"
-        android:hint="+11"
-        android:layout_alignBottom="@+id/edit_cod_pais"
-        android:layout_toRightOf="@+id/edit_cod_pais"
-        android:layout_toEndOf="@+id/edit_cod_pais"
-        android:textColor="@color/textColorPrimary" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/edit_telefone"
-        android:layout_alignTop="@+id/edit_cod_area"
-        android:layout_toRightOf="@+id/edit_cod_area"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:hint="99758-6958"
-        android:textColor="@color/textColorPrimary" />
+        android:hint="Digite o seu e-mail" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/edit_Login_senha"
+        android:layout_marginTop="32dp"
+        android:hint="Digite a sua senha"
+        android:layout_below="@+id/edit_Login_email"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Button
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/botaoCadastrar"
-        android:id="@+id/button_Cadastrar"
-        android:layout_marginTop="31dp"
-        android:layout_below="@+id/edit_cod_pais"
+        android:text="@string/botao_logar"
+        android:id="@+id/buttonLogar"
+        android:layout_marginTop="28dp"
+        android:layout_below="@+id/edit_Login_senha"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="@color/colorPrimaryDark"
-        android:textColor="@color/textColorPrimary" />
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/texto_cadastre"
+        android:id="@+id/textView3"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="33dp"
+        android:layout_below="@+id/buttonLogar"
+        android:layout_centerHorizontal="true"
+        android:clickable="false"
+        android:onClick="abrirCadastoUsuarios" />
 
 </RelativeLayout>

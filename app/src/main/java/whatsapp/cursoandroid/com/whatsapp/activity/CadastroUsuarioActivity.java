@@ -1,22 +1,15 @@
 package whatsapp.cursoandroid.com.whatsapp.activity;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 
 import whatsapp.cursoandroid.whatsappandroid.cursoandroid.whatsapp.R;
 
-
-public class LoginActivity extends AppCompatActivity {
+public class CadastroUsuarioActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-    }
-
-    public void abrirCadastroUsuarios(View view){
-        Intent intent = new Intent(LoginActivity.this, CadastroUsuarioActivity.class);
+        setContentView(R.layout.activity_cadastro_usuario);
     }
 }
