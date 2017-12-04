@@ -51,30 +51,7 @@ public class Util {
         dialog.show();
     }
 
-    public void signInWithPhoneAuthCredential(PhoneAuthCredential credential, final Activity activity) {
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("Token", "signInWithCredential:success");
 
-                            FirebaseUser user = task.getResult().getUser();
-                            // ...
-                            Toast.makeText(activity.getApplicationContext(),"Token Valido",Toast.LENGTH_SHORT).show();
-                        }
-                        else{
-                            // Sign in failed, display a message and update the UI
-                            Log.w("Token", "signInWithCredential:failure", task.getException());
-                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                // The verification code entered was invalid
-                                Toast.makeText(activity.getApplicationContext(),"Token Invalido",Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-                });
-    }
 
     public void changeActivity(Context context, Class classes){
         Intent intent = new Intent(context, classes);

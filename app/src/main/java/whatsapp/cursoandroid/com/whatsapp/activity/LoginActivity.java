@@ -37,25 +37,23 @@ public class LoginActivity extends AppCompatActivity {
     private String telefoneSemFormatacao;
     private Util util;
     private FirebaseAuth mAuth;
-    private String token = "";
+    private String verificationID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        nome     = (EditText) findViewById(R.id.edit_nome);
         telefone = (EditText) findViewById(R.id.edit_telefone);
         codPais  = (EditText) findViewById(R.id.edit_cod_pais);
+        nome     = (EditText) findViewById(R.id.edit_nome);
         codArea  = (EditText) findViewById(R.id.edit_cod_area);
         botaoCadastrar = (Button) findViewById(R.id.button_Cadastrar);
-
 
         util = new Util();
         codPais.addTextChangedListener(util.GenerateMask("+NN",codPais));
         codArea.addTextChangedListener(util.GenerateMask("NN",codArea));
         telefone.addTextChangedListener(util.GenerateMask("NNNNN-NNNN",telefone));
-
 
         botaoCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,24 +66,30 @@ public class LoginActivity extends AppCompatActivity {
                     telefoneSemFormatacao = telefoneCompleto.replace("-", "");
 
                     //telefoneSemFormatacao = "+5554";
-                    verifyPhoneNumber(telefoneSemFormatacao);
+                    String tel = telefoneSemFormatacao;
+                    sendSMS(telefoneSemFormatacao);
                 }
             }
         });
 
     }
 
-    public void verifyPhoneNumber(String phoneNumber){
-        phoneVerificarionSMS();
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                phoneNumber,        // Phone number to verify
-                60,                 // Timeout duration
-                TimeUnit.SECONDS,   // Unit of timeout
-                this,               // Activity (for callback binding)
-                mCallbacks);        // OnVerificationStateChangedCallbacks
+    public void sendSMS(String phoneNumber){
+        try {
+            phoneVerificationSMS();
+            PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                    phoneNumber,        // Phone number to verify
+                    60,                 // Timeout duration
+                    TimeUnit.SECONDS,   // Unit of timeout
+                    LoginActivity.this,               // Activity (for callback binding)
+                    mCallbacks);        // OnVerificationStateChangedCallbacks
+        }
+        catch (Exception e){
+            Log.d("ErroFirebaseSMS: ", e.toString());
+        }
     }
 
-    public void phoneVerificarionSMS(){
+    public void phoneVerificationSMS(){
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
@@ -95,29 +99,34 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onVerificationFailed(FirebaseException e) {
-                Toast.makeText(LoginActivity.this,"Codigo não Enviado",Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this,"Codigo não Enviado: " + e.toString(),Toast.LENGTH_SHORT).show();
+                Log.d("ErroFirebase: ", e.toString());
             }
 
             @Override
             public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(s, forceResendingToken);
-                token = s.toString();
-                abrirCadastroUsuarios();
+                verificationID = s;
+                verifyCode();
+            }
+
+            @Override
+            public void onCodeAutoRetrievalTimeOut(String s) {
+                verificationID = s;
+                verifyCode();
             }
         };
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("Token", "signInWithCredential:success");
-
                             FirebaseUser user = task.getResult().getUser();
-                            // ...
                         }
                         else{
                             // Sign in failed, display a message and update the UI
@@ -131,9 +140,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void abrirCadastroUsuarios() {
+    public void verifyCode() {
         Intent intent = new Intent(LoginActivity.this, ValidadorActivity.class);
-        intent.putExtra("token",token);
+        intent.putExtra("verificationID",verificationID);
         startActivity(intent);
+        finish();
     }
+
 }
