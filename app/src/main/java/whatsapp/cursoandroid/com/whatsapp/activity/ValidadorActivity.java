@@ -1,6 +1,7 @@
 package whatsapp.cursoandroid.com.whatsapp.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.FirebaseDatabase;
 
 import whatsapp.cursoandroid.com.whatsapp.helper.Preferencias;
 import whatsapp.cursoandroid.com.whatsapp.helper.Util;
@@ -58,17 +60,17 @@ public class ValidadorActivity extends AppCompatActivity {
 
     }
 
-    public void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+    public void signInWithPhoneAuthCredential(final PhoneAuthCredential credential) {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d("Token", "signInWithCredential:success");
-                            saveDataSQLLite(numero,verificationID,code);
                             FirebaseUser user = task.getResult().getUser();
                             Intent intent = new Intent(ValidadorActivity.this,MainActivity.class);
                             startActivity(intent);
+                            saveNumero(verificationID,code);
                             finish();
                         }
                         else {
@@ -81,6 +83,8 @@ public class ValidadorActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
 
     public void verifyCod(View view){
         try {
@@ -109,6 +113,15 @@ public class ValidadorActivity extends AppCompatActivity {
         catch (Exception e){
             Log.i("ErroWriteDatabase",e.toString());
         }
+    }
+
+    public void saveNumero(String verification, String code){
+        SharedPreferences sharedPreferences = getSharedPreferences("auth",0);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString("verification",verification);
+        editor.putString("code",code);
+        editor.commit();
     }
 
     }

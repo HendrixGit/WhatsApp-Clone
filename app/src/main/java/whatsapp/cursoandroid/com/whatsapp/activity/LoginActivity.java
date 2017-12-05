@@ -1,6 +1,7 @@
 package whatsapp.cursoandroid.com.whatsapp.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
@@ -60,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         codPais.addTextChangedListener(util.GenerateMask("+NN",codPais));
         codArea.addTextChangedListener(util.GenerateMask("NN",codArea));
         telefone.addTextChangedListener(util.GenerateMask("NNNNN-NNNN",telefone));
-        createDatabase();
+
 
         botaoCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +80,9 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        if (FirebaseAuth.getInstance().getCurrentUser() != null){
+          logedUser();
+        }
     }
 
     public void sendSMS(String phoneNumber){
@@ -134,8 +138,7 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("Token", "signInWithCredential:success");
                             FirebaseUser user = task.getResult().getUser();
-                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                            startActivity(intent);
+                            logedUser();
                             finish();
                         }
                         else{
@@ -147,6 +150,11 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void logedUser() {
+        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+        startActivity(intent);
     }
 
 
