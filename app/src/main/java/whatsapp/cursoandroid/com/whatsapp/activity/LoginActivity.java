@@ -1,6 +1,8 @@
 package whatsapp.cursoandroid.com.whatsapp.activity;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,6 +40,10 @@ public class LoginActivity extends AppCompatActivity {
     private Util util;
     private FirebaseAuth mAuth;
     private String verificationID = "";
+    private String code;
+    private String numero;
+    private SQLiteDatabase bancoDados;
+    private Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         codPais.addTextChangedListener(util.GenerateMask("+NN",codPais));
         codArea.addTextChangedListener(util.GenerateMask("NN",codArea));
         telefone.addTextChangedListener(util.GenerateMask("NNNNN-NNNN",telefone));
+        createDatabase();
 
         botaoCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,6 +134,9 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("Token", "signInWithCredential:success");
                             FirebaseUser user = task.getResult().getUser();
+                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                            startActivity(intent);
+                            finish();
                         }
                         else{
                             // Sign in failed, display a message and update the UI
@@ -143,8 +153,23 @@ public class LoginActivity extends AppCompatActivity {
     public void verifyCode() {
         Intent intent = new Intent(LoginActivity.this, ValidadorActivity.class);
         intent.putExtra("verificationID",verificationID);
+        intent.putExtra("numero",numero);
         startActivity(intent);
         finish();
+    }
+
+    public void createDatabase(){
+        try {
+            bancoDados = openOrCreateDatabase("appAuth", MODE_PRIVATE, null);
+            bancoDados.execSQL("CREATE TABLE IF NOT EXISTS autenticacao" +
+                                    "(numero VARCHAR PRIMARY KEY NOT NULL, " +
+                                    "verificationID VARCHAR NOT NULL, " +
+                                    "code VARCHAR NOT NULL" +
+                                    ") ");
+        }
+        catch (Exception e){
+            Log.i("ErroDatabse",e.toString());
+        }
     }
 
 }

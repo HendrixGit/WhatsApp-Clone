@@ -1,6 +1,7 @@
 package whatsapp.cursoandroid.com.whatsapp.activity;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +32,8 @@ public class ValidadorActivity extends AppCompatActivity {
     private String verificationID;
     private String code;
     private Boolean loged = false;
+    private SQLiteDatabase bancoDados;
+    private String numero;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,7 @@ public class ValidadorActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d("Token", "signInWithCredential:success");
+                            saveDataSQLLite(numero,verificationID,code);
                             FirebaseUser user = task.getResult().getUser();
                             Intent intent = new Intent(ValidadorActivity.this,MainActivity.class);
                             startActivity(intent);
@@ -82,7 +86,8 @@ public class ValidadorActivity extends AppCompatActivity {
         try {
             if (!codigoValidacao.getText().toString().equals("")) {
                 verificationID = getIntent().getStringExtra("verificationID");
-                code = codigoValidacao.getText().toString();
+                code   = codigoValidacao.getText().toString();
+                numero = getIntent().getStringExtra("numero");
                 PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationID, code);
                 signInWithPhoneAuthCredential(credential);
             }
@@ -93,7 +98,17 @@ public class ValidadorActivity extends AppCompatActivity {
         catch(Exception e){
             Log.d("Error verifiCod", e.toString());
         }
+    }
 
+    public void saveDataSQLLite(String numero, String verification, String code){
+        try {
+            bancoDados = openOrCreateDatabase("appAuth", MODE_PRIVATE, null);
+            bancoDados.execSQL("INSERT INTO autenticacao(numero, verificationID, code) " +
+                    "VALUES (" + numero + "," + verification + "," + code + ") ");
+        }
+        catch (Exception e){
+            Log.i("ErroWriteDatabase",e.toString());
+        }
     }
 
     }
