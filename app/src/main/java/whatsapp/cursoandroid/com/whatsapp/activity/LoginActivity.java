@@ -1,10 +1,12 @@
 package whatsapp.cursoandroid.com.whatsapp.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +27,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.concurrent.TimeUnit;
 
+import whatsapp.cursoandroid.com.whatsapp.helper.Permissao;
 import whatsapp.cursoandroid.com.whatsapp.helper.Util;
 import whatsapp.cursoandroid.whatsappandroid.cursoandroid.whatsapp.R;
 
@@ -45,11 +48,17 @@ public class LoginActivity extends AppCompatActivity {
     private String numero;
     private SQLiteDatabase bancoDados;
     private Cursor cursor;
+    private String[]  permissoesNecessarias = new String[]{
+            android.Manifest.permission.SEND_SMS
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        Permissao.validaPermissoes(1, this, permissoesNecessarias);
 
         telefone = (EditText) findViewById(R.id.edit_telefone);
         codPais  = (EditText) findViewById(R.id.edit_cod_pais);
@@ -166,6 +175,30 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
+    public void onRequestPermissionsResult(int requestCode, String[] permissoes, int[] grantResults){//verificar se as opcoes foi negada
+        super.onRequestPermissionsResult(requestCode, permissoes, grantResults);
+        for(int resultado : grantResults){
+            if(resultado == PackageManager.PERMISSION_DENIED){
+               alertaValidacaoPermissao();
+            }
+        }
+    }
+
+    private void alertaValidacaoPermissao(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Permissões Negagas: ");
+        builder.setMessage("Para utilizar o app é preciso aceitar as permissões");
+        builder.setPositiveButton("CONFIRMA", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     public void createDatabase(){
         try {
             bancoDados = openOrCreateDatabase("appAuth", MODE_PRIVATE, null);
@@ -179,5 +212,4 @@ public class LoginActivity extends AppCompatActivity {
             Log.i("ErroDatabse",e.toString());
         }
     }
-
 }
