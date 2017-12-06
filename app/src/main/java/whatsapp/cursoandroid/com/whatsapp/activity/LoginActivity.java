@@ -24,11 +24,14 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.concurrent.TimeUnit;
 
+import whatsapp.cursoandroid.com.whatsapp.config.ConfiguracaoFirebase;
 import whatsapp.cursoandroid.com.whatsapp.helper.Permissao;
 import whatsapp.cursoandroid.com.whatsapp.helper.Util;
+import whatsapp.cursoandroid.com.whatsapp.model.Usuario;
 import whatsapp.cursoandroid.whatsappandroid.cursoandroid.whatsapp.R;
 
 
@@ -51,7 +54,8 @@ public class LoginActivity extends AppCompatActivity {
     private String[]  permissoesNecessarias = new String[]{
             android.Manifest.permission.SEND_SMS
     };
-
+    private DatabaseReference referencia;
+    private Usuario usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         Permissao.validaPermissoes(1, this, permissoesNecessarias);
+        usuario = new Usuario();
 
         telefone = (EditText) findViewById(R.id.edit_telefone);
         codPais  = (EditText) findViewById(R.id.edit_cod_pais);
@@ -82,6 +87,10 @@ public class LoginActivity extends AppCompatActivity {
                     telefoneSemFormatacao = telefoneCompleto.replace("+","");
                     telefoneSemFormatacao = telefoneCompleto.replace("-", "");
 
+                    usuario = new Usuario();
+                    usuario.setNome(nomeUsuario);
+                    usuario.setNumero(telefoneSemFormatacao);
+
                     //telefoneSemFormatacao = "+5554";
                     String tel = telefoneSemFormatacao;
                     sendSMS(telefoneSemFormatacao);
@@ -92,9 +101,15 @@ public class LoginActivity extends AppCompatActivity {
         if (FirebaseAuth.getInstance().getCurrentUser() != null){
           logedUser();
         }
+        referencia = ConfiguracaoFirebase.getFirebaseDatabase();
+        referencia.child("pontos").setValue(800);
     }
 
-    public void sendSMS(String phoneNumber){
+    private void cadastrarUsuario(Usuario usuario){
+
+    }
+
+    private void sendSMS(String phoneNumber){
         try {
             phoneVerificationSMS();
             PhoneAuthProvider.getInstance().verifyPhoneNumber(
@@ -109,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void phoneVerificationSMS(){
+    private void phoneVerificationSMS(){
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
@@ -167,7 +182,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void verifyCode() {
+    private void verifyCode() {
         Intent intent = new Intent(LoginActivity.this, ValidadorActivity.class);
         intent.putExtra("verificationID",verificationID);
         intent.putExtra("numero",numero);
@@ -199,7 +214,7 @@ public class LoginActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    public void createDatabase(){
+    private void createDatabase(){
         try {
             bancoDados = openOrCreateDatabase("appAuth", MODE_PRIVATE, null);
             bancoDados.execSQL("CREATE TABLE IF NOT EXISTS autenticacao" +
