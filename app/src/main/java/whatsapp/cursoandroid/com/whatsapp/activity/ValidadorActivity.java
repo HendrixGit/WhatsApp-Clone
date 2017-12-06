@@ -70,7 +70,7 @@ public class ValidadorActivity extends AppCompatActivity {
                             FirebaseUser user = task.getResult().getUser();
                             Intent intent = new Intent(ValidadorActivity.this,MainActivity.class);
                             startActivity(intent);
-                            saveNumero(verificationID,code);
+                            saveNumero(numero,verificationID,code);
                             finish();
                         }
                         else {
@@ -115,12 +115,13 @@ public class ValidadorActivity extends AppCompatActivity {
         }
     }
 
-    public void saveNumero(String verification, String code){
+    public void saveNumero(String numero, String verification, String code){
         SharedPreferences sharedPreferences = getSharedPreferences("auth",0);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.putString("verification",verification);
         editor.putString("code",code);
+        editor.putString("numero",numero);
         editor.commit();
     }
 
