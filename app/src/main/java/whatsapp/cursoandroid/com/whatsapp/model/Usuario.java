@@ -1,5 +1,10 @@
 package whatsapp.cursoandroid.com.whatsapp.model;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
+
+import whatsapp.cursoandroid.com.whatsapp.config.ConfiguracaoFirebase;
+
 public class Usuario {
     private String id;
     private String numero;
@@ -9,6 +14,13 @@ public class Usuario {
 
     }
 
+    public void salvar(){
+        DatabaseReference referenciaDatabase = ConfiguracaoFirebase.getFirebaseDatabase();
+        referenciaDatabase.child("usuarios").child(getId()).setValue(this);
+
+    }
+
+    @Exclude
     public String getId() {
         return id;
     }

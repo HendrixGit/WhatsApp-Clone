@@ -20,10 +20,9 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.database.FirebaseDatabase;
 
-import whatsapp.cursoandroid.com.whatsapp.helper.Preferencias;
 import whatsapp.cursoandroid.com.whatsapp.helper.Util;
+import whatsapp.cursoandroid.com.whatsapp.model.Usuario;
 import whatsapp.cursoandroid.whatsappandroid.cursoandroid.whatsapp.R;
 
 public class ValidadorActivity extends AppCompatActivity {
@@ -36,6 +35,8 @@ public class ValidadorActivity extends AppCompatActivity {
     private Boolean loged = false;
     private SQLiteDatabase bancoDados;
     private String numero;
+    private String id;
+    private Usuario usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,7 @@ public class ValidadorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_validador);
 
         codigoValidacao = (EditText) findViewById(R.id.edit_cod_validacao);
-        validar = (Button) findViewById(R.id.button_validar);
+        validar         = (Button) findViewById(R.id.button_validar);
 
         Util util = new Util();
         codigoValidacao.addTextChangedListener(util.GenerateMask("NNNNNN", codigoValidacao));
@@ -52,8 +53,6 @@ public class ValidadorActivity extends AppCompatActivity {
         validar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //recuperando dados do usuario
-                Preferencias preferencias = new Preferencias(ValidadorActivity.this);
                 verifyCod(v);
             }
         });
@@ -66,11 +65,15 @@ public class ValidadorActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Log.d("Token", "signInWithCredential:success");
-                            FirebaseUser user = task.getResult().getUser();
+                            FirebaseUser usuarioFirebase = task.getResult().getUser();
+                            usuario = new Usuario();
+                            usuario.setId(usuarioFirebase.getUid());
+                            usuario.setNome(getIntent().getStringExtra("nome"));
+                            usuario.setNumero(usuarioFirebase.getPhoneNumber());
+                            usuario.salvar();
+
                             Intent intent = new Intent(ValidadorActivity.this,MainActivity.class);
                             startActivity(intent);
-                            saveNumero(numero,verificationID,code);
                             finish();
                         }
                         else {
@@ -90,8 +93,7 @@ public class ValidadorActivity extends AppCompatActivity {
         try {
             if (!codigoValidacao.getText().toString().equals("")) {
                 verificationID = getIntent().getStringExtra("verificationID");
-                code   = codigoValidacao.getText().toString();
-                numero = getIntent().getStringExtra("numero");
+                code           = codigoValidacao.getText().toString();
                 PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationID, code);
                 signInWithPhoneAuthCredential(credential);
             }
@@ -115,13 +117,14 @@ public class ValidadorActivity extends AppCompatActivity {
         }
     }
 
-    public void saveNumero(String numero, String verification, String code){
+    public void saveDataonSharedPreferences(String numero, String verification, String code, String id){
         SharedPreferences sharedPreferences = getSharedPreferences("auth",0);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+        SharedPreferences.Editor editor     = sharedPreferences.edit();
 
         editor.putString("verification",verification);
         editor.putString("code",code);
         editor.putString("numero",numero);
+        editor.putString("id",id);
         editor.commit();
     }
 

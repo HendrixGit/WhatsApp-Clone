@@ -47,8 +47,6 @@ public class LoginActivity extends AppCompatActivity {
     private Util util;
     private FirebaseAuth mAuth;
     private String verificationID = "";
-    private String code;
-    private String numero;
     private SQLiteDatabase bancoDados;
     private Cursor cursor;
     private String[]  permissoesNecessarias = new String[]{
@@ -56,6 +54,8 @@ public class LoginActivity extends AppCompatActivity {
     };
     private DatabaseReference referencia;
     private Usuario usuario;
+    private PhoneAuthProvider autenticacaoSMS;
+    private FirebaseAuth autenticacao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +64,8 @@ public class LoginActivity extends AppCompatActivity {
 
         Permissao.validaPermissoes(1, this, permissoesNecessarias);
         usuario = new Usuario();
+        autenticacao    = ConfiguracaoFirebase.getFirebaseAutenticacao();
+        autenticacaoSMS = ConfiguracaoFirebase.getFirebaseAutenticacaoSMS();
 
         telefone = (EditText) findViewById(R.id.edit_telefone);
         codPais  = (EditText) findViewById(R.id.edit_cod_pais);
@@ -76,7 +78,6 @@ public class LoginActivity extends AppCompatActivity {
         codArea.addTextChangedListener(util.GenerateMask("NN",codArea));
         telefone.addTextChangedListener(util.GenerateMask("NNNNN-NNNN",telefone));
 
-
         botaoCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,11 +87,6 @@ public class LoginActivity extends AppCompatActivity {
                     String telefoneCompleto = codPais.getText().toString() + codArea.getText().toString() + telefone.getText().toString();
                     telefoneSemFormatacao = telefoneCompleto.replace("+","");
                     telefoneSemFormatacao = telefoneCompleto.replace("-", "");
-
-                    usuario = new Usuario();
-                    usuario.setNome(nomeUsuario);
-                    usuario.setNumero(telefoneSemFormatacao);
-
                     //telefoneSemFormatacao = "+5554";
                     String tel = telefoneSemFormatacao;
                     sendSMS(telefoneSemFormatacao);
@@ -101,18 +97,12 @@ public class LoginActivity extends AppCompatActivity {
         if (FirebaseAuth.getInstance().getCurrentUser() != null){
           logedUser();
         }
-        referencia = ConfiguracaoFirebase.getFirebaseDatabase();
-        referencia.child("pontos").setValue(800);
-    }
-
-    private void cadastrarUsuario(Usuario usuario){
-
     }
 
     private void sendSMS(String phoneNumber){
         try {
             phoneVerificationSMS();
-            PhoneAuthProvider.getInstance().verifyPhoneNumber(
+            autenticacaoSMS.verifyPhoneNumber(
                     phoneNumber,        // Phone number to verify
                     60,                 // Timeout duration
                     TimeUnit.SECONDS,   // Unit of timeout
@@ -185,7 +175,7 @@ public class LoginActivity extends AppCompatActivity {
     private void verifyCode() {
         Intent intent = new Intent(LoginActivity.this, ValidadorActivity.class);
         intent.putExtra("verificationID",verificationID);
-        intent.putExtra("numero",numero);
+        intent.putExtra("nome",nome.getText().toString());
         startActivity(intent);
         finish();
     }
