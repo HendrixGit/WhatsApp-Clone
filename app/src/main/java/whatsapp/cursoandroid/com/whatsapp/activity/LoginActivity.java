@@ -176,6 +176,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(LoginActivity.this, ValidadorActivity.class);
         intent.putExtra("verificationID",verificationID);
         intent.putExtra("nome",nome.getText().toString());
+        intent.putExtra("numero",telefoneSemFormatacao);
         startActivity(intent);
         finish();
     }

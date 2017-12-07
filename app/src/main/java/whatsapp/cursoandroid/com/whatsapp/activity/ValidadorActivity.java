@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -29,6 +30,7 @@ public class ValidadorActivity extends AppCompatActivity {
 
     private EditText codigoValidacao;
     private Button validar;
+    private Button recomercar;
     private FirebaseAuth mAuth;
     private String verificationID;
     private String code;
@@ -45,6 +47,7 @@ public class ValidadorActivity extends AppCompatActivity {
 
         codigoValidacao = (EditText) findViewById(R.id.edit_cod_validacao);
         validar         = (Button) findViewById(R.id.button_validar);
+        recomercar      = (Button) findViewById(R.id.button_recomecar);
 
         Util util = new Util();
         codigoValidacao.addTextChangedListener(util.GenerateMask("NNNNNN", codigoValidacao));
@@ -54,6 +57,15 @@ public class ValidadorActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 verifyCod(v);
+            }
+        });
+
+        recomercar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 

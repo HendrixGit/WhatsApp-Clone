@@ -58,11 +58,23 @@
         android:layout_height="wrap_content"
         android:text="@string/botaoValidar"
         android:id="@+id/button_validar"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28dp"
         android:textColor="@color/textColorPrimary"
         android:background="@color/colorPrimaryDark"
         android:layout_below="@+id/edit_cod_validacao"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_recomecar"
+        android:layout_below="@+id/button_validar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="28dp"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="#ffffff"
+        android:text="@string/recomercar" />
 
 </RelativeLayout>

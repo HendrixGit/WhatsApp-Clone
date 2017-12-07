@@ -10,7 +10,7 @@ public class Usuario {
     private String numero;
     private String nome;
 
-    public Usuario() {
+    public Usuario() {//e necessario ter um contrutor para passar o objeto para o database
 
     }
 
