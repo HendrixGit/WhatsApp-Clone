@@ -18,9 +18,11 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
+import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
@@ -91,12 +93,11 @@ public class LoginActivity extends AppCompatActivity {
                     String tel = telefoneSemFormatacao;
                     sendSMS(telefoneSemFormatacao);
                 }
+                else{
+                    Toast.makeText(LoginActivity.this,"Favor insira os dados",Toast.LENGTH_SHORT).show();
+                }
             }
         });
-
-        if (FirebaseAuth.getInstance().getCurrentUser() != null){
-          logedUser();
-        }
     }
 
     private void sendSMS(String phoneNumber){
@@ -124,7 +125,18 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onVerificationFailed(FirebaseException e) {
-                Toast.makeText(LoginActivity.this,"Codigo não Enviado: " + e.toString(),Toast.LENGTH_SHORT).show();
+                if (e instanceof FirebaseAuthInvalidCredentialsException) {
+                    Toast.makeText(LoginActivity.this, "Numero de telefone Inválido: " + e.toString(), Toast.LENGTH_SHORT).show();
+                }
+                else if (e instanceof FirebaseTooManyRequestsException){
+                    Toast.makeText(LoginActivity.this, "Tempo de envio excedido, ou envio de códigos sucetivos: " + e.toString(), Toast.LENGTH_SHORT).show();
+                }
+                else if (e instanceof FirebaseAuthUserCollisionException){
+                    Toast.makeText(LoginActivity.this, "Numero de telefone ja cadstrado: " + e.toString(), Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(LoginActivity.this, "Erro: " + e.toString(), Toast.LENGTH_SHORT).show();
+                }
                 Log.d("ErroFirebase: ", e.toString());
             }
 

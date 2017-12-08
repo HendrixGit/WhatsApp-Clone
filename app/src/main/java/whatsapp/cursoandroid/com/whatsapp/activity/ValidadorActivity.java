@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -51,7 +50,6 @@ public class ValidadorActivity extends AppCompatActivity {
 
         Util util = new Util();
         codigoValidacao.addTextChangedListener(util.GenerateMask("NNNNNN", codigoValidacao));
-        mAuth = FirebaseAuth.getInstance();
 
         validar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,19 +89,17 @@ public class ValidadorActivity extends AppCompatActivity {
                         else {
                             Log.w("Token", "signInWithCredential:failure", task.getException());
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-
+                                Toast.makeText(ValidadorActivity.this,"Código de verificação inválido",Toast.LENGTH_SHORT).show();
                             }
-                            Toast.makeText(ValidadorActivity.this,"Login inválido",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
 
-
-
     public void verifyCod(View view){
         try {
             if (!codigoValidacao.getText().toString().equals("")) {
+                mAuth = FirebaseAuth.getInstance();
                 verificationID = getIntent().getStringExtra("verificationID");
                 code           = codigoValidacao.getText().toString();
                 PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationID, code);
