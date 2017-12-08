@@ -122,7 +122,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
                 Toast.makeText(LoginActivity.this,"Token Enviado",Toast.LENGTH_SHORT).show();
-                signInWithPhoneAuthCredential(phoneAuthCredential);
+
             }
 
             @Override
@@ -157,33 +157,11 @@ public class LoginActivity extends AppCompatActivity {
         };
     }
 
-    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("Token", "signInWithCredential:success");
-                            FirebaseUser user = task.getResult().getUser();
-                            logedUser();
-                            finish();
-                        }
-                        else{
-                            // Sign in failed, display a message and update the UI
-                            Log.w("Token", "signInWithCredential:failure", task.getException());
-                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                // The verification code entered was invalid
-                            }
-                        }
-                    }
-                });
-    }
-
     private void logedUser() {
         if (autenticacao.getCurrentUser() != null) {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
+            finish();
         }
     }
 

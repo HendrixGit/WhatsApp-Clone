@@ -6,4 +6,6 @@
     <string name="botao_logar">Logar</string>
     <string name="texto_cadastre">Não tem conta cadastre-se</string>
     <string name="recomercar">Recomeçar</string>
+    <string name="item_configuracoes">Settings</string>
+    <string name="item_sair">Sair</string>
 </resources>
