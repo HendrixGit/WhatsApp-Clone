@@ -10,4 +10,12 @@
     tools:context="whatsapp.cursoandroid.whatsappandroid.cursoandroid.whatsapp.MainActivity"
     android:background="@color/colorPrimary">
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sair"
+        android:id="@+id/button_sair"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp" />
 </RelativeLayout>
