@@ -48,6 +48,7 @@ public class ValidadorActivity extends AppCompatActivity {
         validar         = (Button) findViewById(R.id.button_validar);
         recomercar      = (Button) findViewById(R.id.button_recomecar);
 
+
         Util util = new Util();
         codigoValidacao.addTextChangedListener(util.GenerateMask("NNNNNN", codigoValidacao));
 
@@ -134,6 +135,14 @@ public class ValidadorActivity extends AppCompatActivity {
         editor.putString("numero",numero);
         editor.putString("id",id);
         editor.commit();
+    }
+
+    public void checkCredential(){
+        Intent intent = getIntent();
+        PhoneAuthCredential credential = (PhoneAuthCredential) intent.getSerializableExtra("credential");
+        if (credential != null){
+            signInWithPhoneAuthCredential(credential);
+        }
     }
 
     }
