@@ -21,9 +21,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
+import whatsapp.cursoandroid.com.whatsapp.R;
 import whatsapp.cursoandroid.com.whatsapp.helper.Util;
 import whatsapp.cursoandroid.com.whatsapp.model.Usuario;
-import whatsapp.cursoandroid.whatsappandroid.cursoandroid.whatsapp.R;
 
 public class ValidadorActivity extends AppCompatActivity {
 

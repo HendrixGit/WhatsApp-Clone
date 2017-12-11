@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import whatsapp.cursoandroid.whatsappandroid.cursoandroid.whatsapp.R;
+import whatsapp.cursoandroid.com.whatsapp.R;
 
 /**
  * A simple {@link Fragment} subclass.

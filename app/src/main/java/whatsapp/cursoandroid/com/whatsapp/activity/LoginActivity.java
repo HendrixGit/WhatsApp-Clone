@@ -25,11 +25,11 @@ import com.google.firebase.database.DatabaseReference;
 
 import java.util.concurrent.TimeUnit;
 
+import whatsapp.cursoandroid.com.whatsapp.R;
 import whatsapp.cursoandroid.com.whatsapp.config.ConfiguracaoFirebase;
 import whatsapp.cursoandroid.com.whatsapp.helper.Permissao;
 import whatsapp.cursoandroid.com.whatsapp.helper.Util;
 import whatsapp.cursoandroid.com.whatsapp.model.Usuario;
-import whatsapp.cursoandroid.whatsappandroid.cursoandroid.whatsapp.R;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                     String telefoneCompleto = codPais.getText().toString() + codArea.getText().toString() + telefone.getText().toString();
                     telefoneSemFormatacao = telefoneCompleto.replace("+","");
                     telefoneSemFormatacao = telefoneCompleto.replace("-", "");
-                    telefoneSemFormatacao = "+5554";
+                    //telefoneSemFormatacao = "+5554";
                     String tel = telefoneSemFormatacao;
                     sendSMS(telefoneSemFormatacao);
                 }

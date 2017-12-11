@@ -3,7 +3,8 @@ package whatsapp.cursoandroid.com.whatsapp.activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import whatsapp.cursoandroid.whatsappandroid.cursoandroid.whatsapp.R;
+import whatsapp.cursoandroid.com.whatsapp.R;
+
 
 public class CadastroUsuarioActivity extends AppCompatActivity {
 
