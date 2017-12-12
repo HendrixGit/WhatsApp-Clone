@@ -1,6 +1,8 @@
 package whatsapp.cursoandroid.com.whatsapp.activity;
 
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -14,7 +16,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import whatsapp.cursoandroid.com.whatsapp.R;
+import whatsapp.cursoandroid.com.whatsapp.adapter.TabAdapter;
 import whatsapp.cursoandroid.com.whatsapp.config.ConfiguracaoFirebase;
+import whatsapp.cursoandroid.com.whatsapp.helper.SlidingTabLayout;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -23,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     private Button botaoSair;
     private FirebaseAuth autenticacao;
     private Toolbar toolbar;
+
+    private SlidingTabLayout slidingTabLayout;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +40,17 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("WhatsApp");
         setSupportActionBar(toolbar);
+
+        slidingTabLayout = (SlidingTabLayout) findViewById(R.id.stl_tabs);
+        slidingTabLayout.setDistributeEvenly(true);//preenche toda a largura
+        slidingTabLayout.setSelectedIndicatorColors(ContextCompat.getColor(this,R.color.colorAccent));
+        viewPager = (ViewPager) findViewById(R.id.vp_pagina);
+
+        //configurando adapter
+        TabAdapter tabAdapter = new TabAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(tabAdapter);
+
+        slidingTabLayout.setViewPager(viewPager);
     }
 
     @Override
