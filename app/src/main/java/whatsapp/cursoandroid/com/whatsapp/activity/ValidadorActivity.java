@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,7 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
 import whatsapp.cursoandroid.com.whatsapp.R;
+import whatsapp.cursoandroid.com.whatsapp.helper.Base64Custom;
 import whatsapp.cursoandroid.com.whatsapp.helper.Util;
 import whatsapp.cursoandroid.com.whatsapp.model.Usuario;
 
@@ -78,14 +80,13 @@ public class ValidadorActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             FirebaseUser usuarioFirebase = task.getResult().getUser();
                             usuario = new Usuario();
-                            usuario.setId(usuarioFirebase.getUid());
+                            String identificadorUsuario = Base64Custom.codificarBase64(usuarioFirebase.getPhoneNumber());
+                            usuario.setId(identificadorUsuario);
                             usuario.setNome(getIntent().getStringExtra("nome"));
                             usuario.setNumero(usuarioFirebase.getPhoneNumber());
                             usuario.salvar();
 
-                            Intent intent = new Intent(ValidadorActivity.this,MainActivity.class);
-                            startActivity(intent);
-                            finish();
+                            abrirLoginUsuario();
                         }
                         else {
                             Log.w("Token", "signInWithCredential:failure", task.getException());
@@ -95,6 +96,12 @@ public class ValidadorActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void abrirLoginUsuario() {
+        Intent intent = new Intent(ValidadorActivity.this,MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void verifyCod(View view){
