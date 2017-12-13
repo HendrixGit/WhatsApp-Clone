@@ -26,4 +26,8 @@ public class Preferencias {
         editor.commit();//salva os dados no arquivo de preferencia criado
     }
 
+    public String getIdentificador(){
+        return sharedPreferences.getString(CHAVE_IDENTIFICADOR, null);
+    }
+
 }

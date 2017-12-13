@@ -27,7 +27,10 @@ import whatsapp.cursoandroid.com.whatsapp.R;
 import whatsapp.cursoandroid.com.whatsapp.adapter.TabAdapter;
 import whatsapp.cursoandroid.com.whatsapp.config.ConfiguracaoFirebase;
 import whatsapp.cursoandroid.com.whatsapp.helper.Base64Custom;
+import whatsapp.cursoandroid.com.whatsapp.helper.Preferencias;
 import whatsapp.cursoandroid.com.whatsapp.helper.SlidingTabLayout;
+import whatsapp.cursoandroid.com.whatsapp.model.Contato;
+import whatsapp.cursoandroid.com.whatsapp.model.Usuario;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -99,13 +102,27 @@ public class MainActivity extends AppCompatActivity {
                 else{//verificar se o usuario esta cadastrado no app
                     identificadorContato = Base64Custom.codificarBase64(telefone);
                     //recuperar instancia firebase
-                    firebase = ConfiguracaoFirebase.getFirebaseDatabase().child("usuarios").child(identificadorContato);
+                    firebase = ConfiguracaoFirebase.getFirebaseDatabase().child("usuarios").child(identificadorContato);//where
                     firebase.addListenerForSingleValueEvent(new ValueEventListener() {//consulta somente uma vez e recupera os dados
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if (dataSnapshot.getValue() != null){
+                                //recuperar dados do contato a ser adicionado
+                                Usuario usuarioContato = dataSnapshot.getValue(Usuario.class);//retorna um objeto com os dados do contato
+
+                                Preferencias preferencias = new Preferencias(MainActivity.this);
+                                String identificadorUsuarioLogado = preferencias.getIdentificador();
                                 firebase = ConfiguracaoFirebase.getFirebaseDatabase();
-                                //firebase.child("contatos").child(Base64Custom.codificarBase64();
+                                firebase.child("contatos").
+                                         child(identificadorUsuarioLogado)
+                                        .child(identificadorContato);
+
+                                Contato contato = new Contato();
+                                contato.setIdentificadorUsuario(identificadorContato);
+                                contato.setNumero(usuarioContato.getNumero());
+                                contato.setNome(usuarioContato.getNome());
+
+                                firebase.setValue(contato);
                             }
                             else{
                                 Toast.makeText(getApplicationContext(),"Usuário não possui cadastro",Toast.LENGTH_SHORT).show();
