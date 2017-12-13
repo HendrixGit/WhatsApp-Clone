@@ -2,6 +2,7 @@ package whatsapp.cursoandroid.com.whatsapp.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -13,33 +14,39 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import whatsapp.cursoandroid.com.whatsapp.R;
 import whatsapp.cursoandroid.com.whatsapp.adapter.TabAdapter;
 import whatsapp.cursoandroid.com.whatsapp.config.ConfiguracaoFirebase;
+import whatsapp.cursoandroid.com.whatsapp.helper.Base64Custom;
 import whatsapp.cursoandroid.com.whatsapp.helper.SlidingTabLayout;
-
 
 public class MainActivity extends AppCompatActivity {
 
     private DatabaseReference referenciaFirebase = FirebaseDatabase.getInstance().getReference();
     private Button botaoSair;
-    private FirebaseAuth autenticacao;
+    private FirebaseAuth usuarioFirebase;
     private Toolbar toolbar;
 
     private SlidingTabLayout slidingTabLayout;
     private ViewPager viewPager;
+    private String identificadorContato;
+    private DatabaseReference firebase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
+        usuarioFirebase = ConfiguracaoFirebase.getFirebaseAutenticacao();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("WhatsApp");
         setSupportActionBar(toolbar);
@@ -79,13 +86,38 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.setMessage("Telefone: ");
         alertDialog.setCancelable(false);// nao e possivel fechar a janela ao clicar fora
 
-        EditText editText = new EditText(getApplicationContext());
+        final EditText editText = new EditText(getApplicationContext());
         alertDialog.setView(editText);
 
         alertDialog.setPositiveButton("Cadastrar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                String telefone = editText.getText().toString();
+                if (telefone.isEmpty()){
+                    Toast.makeText(getApplicationContext(),"Preencha o numero",Toast.LENGTH_SHORT).show();
+                }
+                else{//verificar se o usuario esta cadastrado no app
+                    identificadorContato = Base64Custom.codificarBase64(telefone);
+                    //recuperar instancia firebase
+                    firebase = ConfiguracaoFirebase.getFirebaseDatabase().child("usuarios").child(identificadorContato);
+                    firebase.addListenerForSingleValueEvent(new ValueEventListener() {//consulta somente uma vez e recupera os dados
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.getValue() != null){
+                                firebase = ConfiguracaoFirebase.getFirebaseDatabase();
+                                //firebase.child("contatos").child(Base64Custom.codificarBase64();
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(),"Usuário não possui cadastro",Toast.LENGTH_SHORT).show();
+                            }
+                        }
 
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
             }
         });
         alertDialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -99,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void deslogarUsuario(){
-        autenticacao.signOut();
+        usuarioFirebase.signOut();
         Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
         startActivity(intent);
         finish();
