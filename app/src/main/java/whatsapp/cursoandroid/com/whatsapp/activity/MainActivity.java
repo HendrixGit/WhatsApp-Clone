@@ -2,7 +2,6 @@ package whatsapp.cursoandroid.com.whatsapp.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -112,8 +111,9 @@ public class MainActivity extends AppCompatActivity {
 
                                 Preferencias preferencias = new Preferencias(MainActivity.this);
                                 String identificadorUsuarioLogado = preferencias.getIdentificador();
+
                                 firebase = ConfiguracaoFirebase.getFirebaseDatabase();
-                                firebase.child("contatos").
+                                firebase = firebase.child("contatos").
                                          child(identificadorUsuarioLogado)
                                         .child(identificadorContato);
 
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
                                 firebase.setValue(contato);
                             }
                             else{
-                                Toast.makeText(getApplicationContext(),"Usuário não possui cadastro",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this,"Usuário não possui cadastro",Toast.LENGTH_SHORT).show();
                             }
                         }
 

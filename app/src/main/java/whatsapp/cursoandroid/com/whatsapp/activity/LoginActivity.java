@@ -1,5 +1,6 @@
 package whatsapp.cursoandroid.com.whatsapp.activity;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -47,7 +48,8 @@ public class LoginActivity extends AppCompatActivity {
     private SQLiteDatabase bancoDados;
     private Cursor cursor;
     private String[]  permissoesNecessarias = new String[]{
-            android.Manifest.permission.SEND_SMS
+            android.Manifest.permission.SEND_SMS,
+            Manifest.permission.READ_CONTACTS
     };
     private DatabaseReference referencia;
     private Usuario usuario;
