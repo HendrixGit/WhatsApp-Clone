@@ -4,9 +4,7 @@ import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.provider.BaseColumns;
 import android.provider.ContactsContract;
-import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -91,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void abrirCadastroContato(){
+    private void abrirCadastroContato() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
         alertDialog.setTitle("Novo Contato");
         alertDialog.setMessage("Telefone: ");
@@ -104,56 +102,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String telefone = editText.getText().toString();
-                if (telefone.isEmpty()){
-                    Toast.makeText(getApplicationContext(),"Preencha o numero",Toast.LENGTH_SHORT).show();
+                if (telefone.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Preencha o numero", Toast.LENGTH_SHORT).show();
                 }
-                else{//verificar se o usuario esta cadastrado no app
-                    identificadorContato = Base64Custom.codificarBase64(telefone);
-                    //recuperar instancia firebase
-                    firebase = ConfiguracaoFirebase.getFirebaseDatabase().child("usuarios").child(identificadorContato);//where
-                    firebase.addListenerForSingleValueEvent(new ValueEventListener() {//consulta somente uma vez e recupera os dados
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.getValue() != null){
-                                //recuperar dados do contato a ser adicionado
-                                Usuario usuarioContato = dataSnapshot.getValue(Usuario.class);//retorna um objeto com os dados do contato
-
-                                Preferencias preferencias = new Preferencias(MainActivity.this);
-                                String identificadorUsuarioLogado = preferencias.getIdentificador();
-
-                                firebase = ConfiguracaoFirebase.getFirebaseDatabase();
-                                firebase = firebase.child("contatos").
-                                         child(identificadorUsuarioLogado)
-                                        .child(identificadorContato);
-
-                                Contato contato = new Contato();
-                                contato.setIdentificadorUsuario(identificadorContato);
-                                contato.setNumero(usuarioContato.getNumero());
-                                contato.setNome(usuarioContato.getNome());
-
-                                firebase.setValue(contato);
-                            }
-                            else{
-                                Toast.makeText(MainActivity.this,"Usuário não possui cadastro",Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
+                else {//verificar se o usuario esta cadastrado no app
+                    saveContacts(telefone);
                 }
             }
         });
-        alertDialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        alertDialog.create();
-        alertDialog.show();
     }
 
     public void deslogarUsuario(){
@@ -180,11 +136,54 @@ public class MainActivity extends AppCompatActivity {
                 while (phoneCursor.moveToNext()){
                     String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                     Log.i("Usuario: ",name +": "+ phoneNumber);
-                    phoneCursor.moveToNext();
+                    saveContacts(phoneNumber);
+                    //phoneCursor.moveToNext();
                 }
 
             }
         }
         cursor.close();
+    }
+
+    private void saveContacts(final String phoneNumber) {
+        try {
+            String contatoNumero = phoneNumber.replace("+", "");
+            contatoNumero = contatoNumero.replace("-", "");
+            contatoNumero = contatoNumero.replace(" ","");
+            contatoNumero = "+" + contatoNumero;
+            final String identificadorContatoPhone = Base64Custom.codificarBase64(contatoNumero);
+
+            firebase = ConfiguracaoFirebase.getFirebaseDatabase().child("usuarios").child(identificadorContatoPhone);
+            firebase.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() != null) {
+                        Usuario usuarioContato = dataSnapshot.getValue(Usuario.class);
+
+                        Preferencias preferencias = new Preferencias(MainActivity.this);
+                        String identificadorUsuarioLogado = preferencias.getIdentificador();
+
+                        firebase = ConfiguracaoFirebase.getFirebaseDatabase();
+                        firebase = firebase.child("contatos").
+                                child(identificadorUsuarioLogado)
+                                .child(identificadorContatoPhone);
+
+                        Contato contato = new Contato();
+                        contato.setIdentificadorUsuario(identificadorContatoPhone);
+                        contato.setNumero(usuarioContato.getNumero());
+                        contato.setNome(usuarioContato.getNome());
+
+                        firebase.setValue(contato);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }catch (Exception e){
+            Log.i("Erro Exportar Contatos",e.toString());
+        }
     }
 }
