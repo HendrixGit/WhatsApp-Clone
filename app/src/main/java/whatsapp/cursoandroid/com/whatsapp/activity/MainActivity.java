@@ -1,13 +1,19 @@
 package whatsapp.cursoandroid.com.whatsapp.activity;
 
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.provider.BaseColumns;
+import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -42,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private String identificadorContato;
     private DatabaseReference firebase;
+    private String numero;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(tabAdapter);
 
         slidingTabLayout.setViewPager(viewPager);
+
+        extractContatcts();
     }
 
     @Override
@@ -152,5 +161,30 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private void extractContatcts() {
+
+        ContentResolver resolver = getContentResolver();
+        Cursor cursor = resolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+
+                Cursor phoneCursor = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[] {id}, null);
+                //Log.i("Nome: ", id +" "+ name);
+
+                while (phoneCursor.moveToNext()){
+                    String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                    Log.i("Usuario: ",name +": "+ phoneNumber);
+                    phoneCursor.moveToNext();
+                }
+
+            }
+        }
+        cursor.close();
     }
 }
