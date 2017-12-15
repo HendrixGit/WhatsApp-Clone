@@ -17,7 +17,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import whatsapp.cursoandroid.com.whatsapp.R;
-import whatsapp.cursoandroid.com.whatsapp.activity.MainActivity;
 import whatsapp.cursoandroid.com.whatsapp.config.ConfiguracaoFirebase;
 import whatsapp.cursoandroid.com.whatsapp.helper.Preferencias;
 import whatsapp.cursoandroid.com.whatsapp.model.Contato;

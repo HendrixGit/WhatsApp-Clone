@@ -97,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
 
         final EditText editText = new EditText(getApplicationContext());
         alertDialog.setView(editText);
-
         alertDialog.setPositiveButton("Cadastrar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -110,6 +109,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        alertDialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        alertDialog.create();
+        alertDialog.show();
     }
 
     public void deslogarUsuario(){
@@ -146,10 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void saveContacts(final String phoneNumber) {
         try {
-            String contatoNumero = phoneNumber.replace("+", "");
-            contatoNumero = contatoNumero.replace("-", "");
-            contatoNumero = contatoNumero.replace(" ","");
-            contatoNumero = "+" + contatoNumero;
+            String contatoNumero = checkPhoneNumber(phoneNumber);
             final String identificadorContatoPhone = Base64Custom.codificarBase64(contatoNumero);
 
             firebase = ConfiguracaoFirebase.getFirebaseDatabase().child("usuarios").child(identificadorContatoPhone);
@@ -185,5 +189,24 @@ public class MainActivity extends AppCompatActivity {
         catch (Exception e){
             Log.i("Erro Exportar Contatos",e.toString());
         }
+    }
+    private String checkPhoneNumber(String number){
+        String contatoNumero = number.replace("+", "");
+        contatoNumero = contatoNumero.replace("-", "");
+        contatoNumero = contatoNumero.replace(" ","");
+
+        if (contatoNumero.length() == 9){
+            contatoNumero = "+55" + "17" + contatoNumero;
+        }
+        else
+        if (contatoNumero.length() == 11){
+            contatoNumero = "+55" + contatoNumero;
+        }
+        else{
+            if (!contatoNumero.contains("+")) {
+                contatoNumero = "+" + contatoNumero;
+            }
+        }
+        return contatoNumero;
     }
 }
