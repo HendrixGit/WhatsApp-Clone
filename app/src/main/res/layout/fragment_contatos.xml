@@ -6,11 +6,11 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <TextView
+    <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Contatos"
-        android:id="@+id/textView4"
-        android:layout_gravity="center" />
+        android:id="@+id/lv_Contatos"
+        android:divider="@color/cinza"
+        android:dividerHeight="1dp"
+        android:layout_gravity="center_horizontal|top" />
 </FrameLayout>

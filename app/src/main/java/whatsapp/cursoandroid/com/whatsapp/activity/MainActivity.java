@@ -139,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
                     saveContacts(phoneNumber);
                     //phoneCursor.moveToNext();
                 }
-
             }
         }
         cursor.close();
@@ -182,7 +181,8 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
-        }catch (Exception e){
+        }
+        catch (Exception e){
             Log.i("Erro Exportar Contatos",e.toString());
         }
     }

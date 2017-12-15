@@ -5,4 +5,5 @@
     <color name="colorPrimary">#0b6156</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="colorAccent">#3d958a</color>
+    <color name="cinza">#CCCCCC</color>
 </resources>
