@@ -17,6 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import whatsapp.cursoandroid.com.whatsapp.R;
+import whatsapp.cursoandroid.com.whatsapp.adapter.ContatoAdapter;
 import whatsapp.cursoandroid.com.whatsapp.config.ConfiguracaoFirebase;
 import whatsapp.cursoandroid.com.whatsapp.helper.Preferencias;
 import whatsapp.cursoandroid.com.whatsapp.model.Contato;
@@ -28,7 +29,7 @@ public class ContatosFragment extends Fragment {
 
     private ListView listView;
     private ArrayAdapter adapter;
-    private ArrayList<String> contatos;
+    private ArrayList<Contato> contatos;
     private DatabaseReference firebaseDatabase;
     private ValueEventListener valueEventListenerContatos;
 
@@ -56,11 +57,7 @@ public class ContatosFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_contatos, container, false);
 
         listView = (ListView) view.findViewById(R.id.lv_Contatos);
-        adapter = new ArrayAdapter(
-                getActivity(),
-                R.layout.lista_contato,//layout customizado
-                contatos
-        );
+        adapter = new ContatoAdapter(getActivity(),contatos);
         listView.setAdapter(adapter);
 
         Preferencias preferencias = new Preferencias(getActivity());
@@ -74,7 +71,7 @@ public class ContatosFragment extends Fragment {
                 contatos.clear();
                 for (DataSnapshot dados : dataSnapshot.getChildren()){
                     Contato contato = dados.getValue(Contato.class);
-                    contatos.add(contato.getNome());
+                    contatos.add(contato);
                 }
                 adapter.notifyDataSetChanged();//define que os dados mudaram
             }
