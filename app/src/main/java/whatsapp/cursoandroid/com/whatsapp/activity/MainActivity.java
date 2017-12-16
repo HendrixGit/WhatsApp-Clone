@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
         extractContatcts();
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {//sobreescrevendo o metodo para exibir menu
         MenuInflater inflater = getMenuInflater();
