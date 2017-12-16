@@ -1,13 +1,11 @@
 package whatsapp.cursoandroid.com.whatsapp.activity;
 
 import android.content.ContentResolver;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -16,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private String identificadorContato;
     private DatabaseReference firebase;
     private String numero;
+    private Integer requestCode = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,34 +87,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode != 0){
+            Toast.makeText(getApplicationContext(), "Dialog fechada", Toast.LENGTH_SHORT).show();
+            extractContatcts();
+        }
+    }
+
+    
+
     private void abrirCadastroContato() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-        alertDialog.setTitle("Novo Contato");
-        alertDialog.setMessage("Telefone: ");
-        alertDialog.setCancelable(false);// nao e possivel fechar a janela ao clicar fora
-
-        final EditText editText = new EditText(getApplicationContext());
-        alertDialog.setView(editText);
-        alertDialog.setPositiveButton("Cadastrar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String telefone = editText.getText().toString();
-                if (telefone.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Preencha o numero", Toast.LENGTH_SHORT).show();
-                }
-                else {//verificar se o usuario esta cadastrado no app
-                    saveContacts(telefone);
-                }
-            }
-        });
-        alertDialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        alertDialog.create();
-        alertDialog.show();
+        Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
+        intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+        startActivity(intent);
     }
 
     public void deslogarUsuario(){
