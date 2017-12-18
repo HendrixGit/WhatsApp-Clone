@@ -66,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(tabAdapter);
 
         slidingTabLayout.setViewPager(viewPager);
-
-        extractContatcts();
     }
 
 
@@ -85,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.item_sair : deslogarUsuario(); return true;
             case R.id.item_configuracoes: return true;
             case R.id.item_adicionar: abrirCadastroContato(); return true;
+            case R.id.item_atualizar: extractContatcts(); return true;
             default: return super.onOptionsItemSelected(item);
         }
     }
@@ -99,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    
 
     private void abrirCadastroContato() {
         Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);

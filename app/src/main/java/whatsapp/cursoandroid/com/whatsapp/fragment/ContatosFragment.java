@@ -1,6 +1,5 @@
 package whatsapp.cursoandroid.com.whatsapp.fragment;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -89,6 +88,9 @@ public class ContatosFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), ConversaActivity.class);
+                Contato contato = contatos.get(position);
+                intent.putExtra("nome", contato.getNome());
+                intent.putExtra("numero", contato.getNumero());
                 startActivity(intent);
             }
         });

@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="whatsapp.cursoandroid.whatsappandroid.cursoandroid.whatsapp.MainActivity"
+    tools:context="whatsapp.cursoandroid.com.whatsapp.activity.MainActivity"
     android:background="@color/textColorPrimary">
     <include android:id="@+id/toolbar"
         layout="@layout/toolbar"/>

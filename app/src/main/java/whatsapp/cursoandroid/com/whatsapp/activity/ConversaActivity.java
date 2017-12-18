@@ -8,6 +8,9 @@ import whatsapp.cursoandroid.com.whatsapp.R;
 public class ConversaActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
+    //dados destinatario
+    private String nomeUsuarioDestinatario;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,7 +18,11 @@ public class ConversaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_conversa);
 
         toolbar = (Toolbar) findViewById(R.id.tb_conversa);
-        toolbar.setTitle("Usuário");
+        Bundle extra = getIntent().getExtras();
+        if (extra != null){
+            nomeUsuarioDestinatario = extra.getString("nome");
+        }
+        toolbar.setTitle(nomeUsuarioDestinatario);
         toolbar.setNavigationIcon(R.drawable.ic_action_arrow_left);
         setSupportActionBar(toolbar);
     }
