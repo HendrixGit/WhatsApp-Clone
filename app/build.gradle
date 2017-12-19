@@ -28,6 +28,7 @@ dependencies {
     compile 'com.google.firebase:firebase-database:11.2.2'
     compile 'com.google.firebase:firebase-auth:11.2.2'
     compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.wang.avi:library:2.1.3'
 }
 
 

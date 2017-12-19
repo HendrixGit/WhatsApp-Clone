@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import whatsapp.cursoandroid.com.whatsapp.R;
 import whatsapp.cursoandroid.com.whatsapp.adapter.TabAdapter;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private String numero;
     private Integer requestCode = 0;
     private Integer page = 0;
+    private AVLoadingIndicatorView avi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("WhatsApp");
         setSupportActionBar(toolbar);
+        avi = (AVLoadingIndicatorView) findViewById(R.id.avi_Load);
 
         slidingTabLayout = (SlidingTabLayout) findViewById(R.id.stl_tabs);
         slidingTabLayout.setDistributeEvenly(true);//preenche toda a largura
@@ -129,22 +132,27 @@ public class MainActivity extends AppCompatActivity {
 
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
+                startLoading(false);
                 String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
                 String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 
                 Cursor phoneCursor = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
                         ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[] {id}, null);
-                //Log.i("Nome: ", id +" "+ name);
 
                 while (phoneCursor.moveToNext()){
                     String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                     Log.i("Usuario: ",name +": "+ phoneNumber);
                     saveContacts(phoneNumber);
-                    //phoneCursor.moveToNext();
                 }
             }
         }
         cursor.close();
+        startLoading(true);
+    }
+
+    private void startLoading(Boolean stop){
+        if (stop == false){avi.smoothToShow();}
+        else{avi.hide();}
     }
 
     private void saveContacts(final String phoneNumber) {
