@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference firebase;
     private String numero;
     private Integer requestCode = 0;
+    private Integer page = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +65,17 @@ public class MainActivity extends AppCompatActivity {
         //configurando adapter
         TabAdapter tabAdapter = new TabAdapter(getSupportFragmentManager());
         viewPager.setAdapter(tabAdapter);
-
         slidingTabLayout.setViewPager(viewPager);
+
+        Bundle extra = getIntent().getExtras();
+        if (extra != null) {
+            if (extra.getInt("page") == 1) {
+                page = 1;
+            } else {
+                page = 0;
+            }
+        }
+        viewPager.setCurrentItem(page);
     }
 
 

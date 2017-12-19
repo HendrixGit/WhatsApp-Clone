@@ -8,8 +8,8 @@
 
     <include
         layout="@layout/toolbar"
-        android:id="@+id/tb_conversa"
-        ></include>
+        android:id="@+id/tb_conversa">
+    </include>
 
     <ListView
         android:id="@+id/lv_conversas"
@@ -25,13 +25,15 @@
         android:orientation="horizontal"
         android:layout_alignParentBottom="true">
             <EditText
+                android:id="@+id/edit_mensagem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
                 android:layout_weight="1"
-                android:hint="teste"
+                android:hint="Mensagem"
                 android:textColorHint="@android:color/black" />
             <ImageButton
+                android:id="@+id/bt_enviar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_send"
