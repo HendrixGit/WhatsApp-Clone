@@ -62,7 +62,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         Permissao.validaPermissoes(1, this, permissoesNecessarias);
-        usuario = new Usuario();
         autenticacao    = ConfiguracaoFirebase.getFirebaseAutenticacao();
         autenticacaoSMS = ConfiguracaoFirebase.getFirebaseAutenticacaoSMS();
 

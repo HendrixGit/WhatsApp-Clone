@@ -20,8 +20,10 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DatabaseReference;
 
 import whatsapp.cursoandroid.com.whatsapp.R;
+import whatsapp.cursoandroid.com.whatsapp.config.ConfiguracaoFirebase;
 import whatsapp.cursoandroid.com.whatsapp.helper.Base64Custom;
 import whatsapp.cursoandroid.com.whatsapp.helper.Preferencias;
 import whatsapp.cursoandroid.com.whatsapp.helper.Util;
@@ -87,7 +89,7 @@ public class ValidadorActivity extends AppCompatActivity {
                             usuario.salvar();
                             Preferencias preferencias = new Preferencias(ValidadorActivity.this);
                             String identificadorUsuarioLogado = Base64Custom.codificarBase64(usuarioFirebase.getPhoneNumber());
-                            preferencias.salvarDados(identificadorUsuarioLogado);
+                            preferencias.salvarDados(identificadorUsuarioLogado, usuario.getNome());
                             abrirLoginUsuario();
                         }
                         else {
