@@ -45,6 +45,7 @@ public class ConversaActivity extends AppCompatActivity {
     private ListView listView;
     private ArrayList<Mensagem> mensagens;
     private ArrayAdapter<Mensagem> adapter;
+    private ArrayAdapter<Conversa> adapterConversa;
     private ValueEventListener valueEventListenerMensagem;
 
 
