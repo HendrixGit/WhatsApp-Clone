@@ -34,6 +34,7 @@ public class ContatosFragment extends Fragment {
     private ArrayList<Contato> contatos;
     private DatabaseReference firebaseDatabase;
     private ValueEventListener valueEventListenerContatos;
+    private String QtdContatos = "";
 
     public ContatosFragment() {
         // Required empty public constructor
@@ -52,7 +53,7 @@ public class ContatosFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         contatos = new ArrayList<>();
         // Inflate the layout for this fragment
@@ -76,6 +77,7 @@ public class ContatosFragment extends Fragment {
                     contatos.add(contato);
                 }
                 adapter.notifyDataSetChanged();//define que os dados mudaram
+                QtdContatos = String.valueOf(adapter.getCount());
             }
 
             @Override

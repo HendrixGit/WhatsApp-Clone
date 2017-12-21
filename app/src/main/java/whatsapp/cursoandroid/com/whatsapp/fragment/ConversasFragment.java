@@ -1,10 +1,12 @@
 package whatsapp.cursoandroid.com.whatsapp.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -16,8 +18,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import whatsapp.cursoandroid.com.whatsapp.R;
+import whatsapp.cursoandroid.com.whatsapp.activity.ConversaActivity;
 import whatsapp.cursoandroid.com.whatsapp.adapter.ConversaAdapter;
 import whatsapp.cursoandroid.com.whatsapp.config.ConfiguracaoFirebase;
+import whatsapp.cursoandroid.com.whatsapp.helper.Base64Custom;
 import whatsapp.cursoandroid.com.whatsapp.helper.Preferencias;
 import whatsapp.cursoandroid.com.whatsapp.model.Conversa;
 
@@ -58,7 +62,7 @@ public class ConversasFragment extends Fragment {
         adapter  = new ConversaAdapter(getActivity(),conversas);
         listView.setAdapter(adapter);
 
-        Preferencias preferencias = new Preferencias(getActivity());
+        final Preferencias preferencias = new Preferencias(getActivity());
         String idUsuarioLogado = preferencias.getIdentificador();
         firebaseDatabase = ConfiguracaoFirebase.getFirebaseDatabase()
                 .child("conversas")
@@ -81,7 +85,21 @@ public class ConversasFragment extends Fragment {
             }
         };
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Conversa conversa = conversas.get(position);
+                Intent intent = new Intent(getActivity(), ConversaActivity.class);
+                intent.putExtra("nome", conversa.getNome());
+                String numero = Base64Custom.decodificarBase64(conversa.getIdUsuario());
+                intent.putExtra("numero",numero);
+                startActivity(intent);
+            }
+        });
+
         return view;
     }
+
+
 
 }

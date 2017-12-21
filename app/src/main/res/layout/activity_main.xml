@@ -29,7 +29,6 @@
         style="@style/AVLoadingIndicatorView"
         android:visibility="invisible"
         app:indicatorColor="@android:color/black"
-        android:paddingLeft="150dp"
-        />
+        android:paddingLeft="150dp" />
 
 </LinearLayout>

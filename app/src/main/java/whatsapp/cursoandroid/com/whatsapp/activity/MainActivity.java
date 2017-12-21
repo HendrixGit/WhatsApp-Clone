@@ -74,7 +74,8 @@ public class MainActivity extends AppCompatActivity {
         if (extra != null) {
             if (extra.getInt("page") == 1) {
                 page = 1;
-            } else {
+            }
+            else {
                 page = 0;
             }
         }
