@@ -13,6 +13,7 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         />
+
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/tv_numero"
         android:layout_height="wrap_content"
@@ -22,6 +23,5 @@
         android:paddingTop="8dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:paddingBottom="8dp" />
-
+        android:paddingBottom="8dp"/>
 </LinearLayout>

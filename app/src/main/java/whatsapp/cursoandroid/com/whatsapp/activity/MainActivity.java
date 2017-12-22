@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.provider.ContactsContract;
+import android.support.annotation.IntegerRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -144,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
                     String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                     Log.i("Usuario: ",name +": "+ phoneNumber);
                     saveContacts(phoneNumber);
+                    phoneCursor.moveToNext();
                 }
             }
         }
@@ -200,11 +202,17 @@ public class MainActivity extends AppCompatActivity {
         contatoNumero = contatoNumero.replace("-", "");
         contatoNumero = contatoNumero.replace(" ","");
 
-        if (contatoNumero.length() == 9){
+        Integer possibleZero = Integer.parseInt(contatoNumero.substring(0,1));
+        if (possibleZero == 0){
+            contatoNumero = contatoNumero.substring(1);
+            Log.i("Hereconta",contatoNumero);
+        }
+
+        if (contatoNumero.length() <= 9){
             contatoNumero = "+55" + "17" + contatoNumero;
         }
         else
-        if (contatoNumero.length() == 11){
+        if (contatoNumero.length() <= 11){
             contatoNumero = "+55" + contatoNumero;
         }
         else{
