@@ -1,8 +1,11 @@
 package whatsapp.cursoandroid.com.whatsapp.model;
 
+import java.util.Date;
+
 public class Mensagem {
     private String idUsuario;
     private String mensagem;
+    private Date data;
 
     public Mensagem() {
 
@@ -24,4 +27,9 @@ public class Mensagem {
         this.mensagem = mensagem;
     }
 
+    public Date getData() { return data; }
+
+    public void setData(Date data) {
+        this.data = data;
+    }
 }

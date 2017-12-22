@@ -1,9 +1,12 @@
 package whatsapp.cursoandroid.com.whatsapp.model;
 
+import java.util.Date;
+
 public class Conversa {
     private String idUsuario;
     private String nome;
     private String mensagem;
+    private Date data;
 
     public Conversa() {
     }
@@ -30,5 +33,11 @@ public class Conversa {
 
     public void setIdUsuario(String idUsuario) {
         this.idUsuario = idUsuario;
+    }
+
+    public Date getData() { return data; }
+
+    public void setData(Date data) {
+        this.data = data;
     }
 }

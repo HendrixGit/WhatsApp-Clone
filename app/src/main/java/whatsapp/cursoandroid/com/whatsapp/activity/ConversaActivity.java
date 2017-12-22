@@ -16,7 +16,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import whatsapp.cursoandroid.com.whatsapp.R;
 import whatsapp.cursoandroid.com.whatsapp.adapter.MensagemAdapter;
@@ -46,6 +49,7 @@ public class ConversaActivity extends AppCompatActivity {
     private ArrayAdapter<Mensagem> adapter;
     private ArrayAdapter<Conversa> adapterConversa;
     private ValueEventListener valueEventListenerMensagem;
+    private Date data;
 
 
     @Override
@@ -53,6 +57,7 @@ public class ConversaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversa);
 
+        data = Calendar.getInstance().getTime();
         Preferencias preferencias = new Preferencias(ConversaActivity.this);
         idUsuarioRemetente = preferencias.getIdentificador();
         nomeUsuarioRemetene = preferencias.getNome();
@@ -117,6 +122,7 @@ public class ConversaActivity extends AppCompatActivity {
                     Mensagem mensagem = new Mensagem();
                     mensagem.setIdUsuario(idUsuarioRemetente);
                     mensagem.setMensagem(textoMensagem);
+                    mensagem.setData(data);
 
                     //salvamos mensagem para o remetente
                     Boolean retornoMensagemRemetente    = salvarMensagem(idUsuarioRemetente,idUsuarioDestinatario,mensagem);
@@ -145,6 +151,7 @@ public class ConversaActivity extends AppCompatActivity {
                     conversa.setIdUsuario(idUsuarioDestinatario);
                     conversa.setNome(nomeUsuarioDestinatario);
                     conversa.setMensagem(textoMensagem);
+                    conversa.setData(data);
                     Boolean retornoConversRemetente = salvarConversa(idUsuarioRemetente,idUsuarioDestinatario,conversa);
                     if (!retornoConversRemetente){
                         Toast.makeText(
@@ -158,6 +165,7 @@ public class ConversaActivity extends AppCompatActivity {
                         conversa.setIdUsuario(idUsuarioRemetente);
                         conversa.setNome(nomeUsuarioRemetene);
                         conversa.setMensagem(textoMensagem);
+                        conversa.setData(data);
                         salvarConversa(idUsuarioDestinatario,idUsuarioRemetente,conversa);
                     }
                     editMensagem.setText("");
@@ -190,7 +198,6 @@ public class ConversaActivity extends AppCompatActivity {
                     .child(idDestinatario)
                     .push()//criado no com o identificador unico
                     .setValue(mensagem);
-
             return true;
         }
         catch (Exception e){

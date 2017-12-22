@@ -10,6 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import whatsapp.cursoandroid.com.whatsapp.R;
+import whatsapp.cursoandroid.com.whatsapp.helper.Util;
 import whatsapp.cursoandroid.com.whatsapp.model.Conversa;
 
 public class ConversaAdapter extends ArrayAdapter {
@@ -34,10 +35,13 @@ public class ConversaAdapter extends ArrayAdapter {
 
             TextView nome = (TextView) view.findViewById(R.id.tv_titulo);
             TextView ultimaMensagem = (TextView) view.findViewById(R.id.tv_subtitulo);
+            TextView dataHora  = (TextView) view.findViewById(R.id.tv_datahora);
 
             Conversa conversa = conversas.get(position);
             nome.setText(conversa.getNome());
             ultimaMensagem.setText(conversa.getMensagem());
+            Util util = new Util();
+            dataHora.setText(util.returnDataString(conversa.getData()));
         }
 
         return view;

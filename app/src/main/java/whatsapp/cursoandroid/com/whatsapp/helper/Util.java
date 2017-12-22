@@ -10,6 +10,9 @@ import com.github.rtoshiro.util.format.SimpleMaskFormatter;
 import com.github.rtoshiro.util.format.text.MaskTextWatcher;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Util {
 
     private FirebaseAuth mAuth;
@@ -48,6 +51,12 @@ public class Util {
     public void changeActivity(Context context, Class classes){
         Intent intent = new Intent(context, classes);
         context.startActivity(intent);
+    }
+
+    public String returnDataString(Date data){
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        String dataFormatada = sdf.format(data);
+        return dataFormatada;
     }
 
 }
