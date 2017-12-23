@@ -54,7 +54,7 @@ public class Util {
     }
 
     public String returnDataString(Date data){
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String dataFormatada = sdf.format(data);
         return dataFormatada;
     }
