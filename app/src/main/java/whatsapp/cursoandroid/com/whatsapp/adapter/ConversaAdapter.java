@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import whatsapp.cursoandroid.com.whatsapp.R;
@@ -41,7 +42,11 @@ public class ConversaAdapter extends ArrayAdapter {
             nome.setText(conversa.getNome());
             ultimaMensagem.setText(conversa.getMensagem());
             Util util = new Util();
-            dataHora.setText(util.returnDataString(conversa.getData()));
+            try {
+                dataHora.setText(util.returnDataString(conversa.getData()));
+            } catch (ParseException e) {
+
+            }
         }
 
         return view;
