@@ -12,4 +12,17 @@
         android:textColor="@android:color/white"
         android:layout_alignParentRight="true"
         android:text="mensagem" />
+
+    <TextView
+        android:id="@+id/tv_horamensagem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/tv_mensagem"
+        android:textSize="9sp"
+        android:text="mensagem 2"/>
+
 </RelativeLayout>
