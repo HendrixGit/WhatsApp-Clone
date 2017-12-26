@@ -66,7 +66,7 @@ public class Util {
         Date dataParametro = sdf.parse(sdf.format(data));
 
         if (dataAtual.compareTo(dataParametro) <= 0 ) {
-            sdf = new SimpleDateFormat("hh:mm");
+            sdf = new SimpleDateFormat("HH:mm");
         }
         else{
             sdf = new SimpleDateFormat("dd/MM/yyyy");
